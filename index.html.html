@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Ejecución Keralty | Roche</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- VARIABLES GLOBALES --- */
+        :root {
+            --roche-blue: #007AC2; --roche-dark: #0033a0; --text-dark: #333333;
+            --text-gray: #544F4F; --bg-light: #F5F5F2; --white: #ffffff;
+            --accent-orange: #E87722; --light-blue: #E6F2F8; --success-green: #00A3A1;
+            --alert-red: #D22630; --warning-yellow: #f5b300;
+        }
+
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: var(--text-dark); }
+
+        /* --- NAVEGACIÓN --- */
+        .header { position: fixed; top: 0; left: 0; width: 100%; height: 80px; background-color: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: flex-end; padding: 0 50px; z-index: 1000; box-sizing: border-box; }
+        .logo-img { height: 45px; mix-blend-mode: multiply; }
+        .bottom-nav { position: fixed; bottom: 25px; left: 40px; z-index: 1000; }
+        .home-btn { background-color: var(--bg-light); color: var(--roche-blue); border: 2px solid var(--roche-blue); padding: 10px 25px; border-radius: 30px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .home-btn:hover { background-color: var(--roche-blue); color: var(--white); transform: translateY(-2px); }
+        .nav-btn { position: fixed; top: 50%; transform: translateY(-50%); background-color: var(--white); color: var(--roche-blue); border: 2px solid var(--roche-blue); width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; z-index: 9999; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); outline: none; }
+        .nav-btn:hover { background-color: var(--roche-blue); color: white; transform: translateY(-50%) scale(1.1); }
+        .nav-prev { left: 20px; } .nav-next { right: 20px; }
+        .nav-btn.hidden { display: none !important; }
+        .slide-number { position: fixed; bottom: 25px; right: 40px; font-size: 1rem; color: var(--roche-blue); font-weight: 700; z-index: 1000; }
+
+        /* --- SLIDES --- */
+        .slide { height: 100vh; width: 100vw; display: none; animation: fadeIn 0.4s ease-out; box-sizing: border-box; position: absolute; top: 0; left: 0;}
+        .slide.active { display: flex; }
+        .slide-cover { background-image: linear-gradient(rgba(0, 51, 160, 0.7), rgba(0, 51, 160, 0.85)), url('img/ADLM-2024-cobas-ccm.jpg'); background-size: cover; background-position: center center; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-top: 80px; }
+        .slide-cover h1 { font-size: 3.5rem; color: var(--white); margin-bottom: 10px; font-weight: 900; max-width: 900px; line-height: 1.2;}
+        .slide-cover p { font-size: 1.5rem; color: #e6f2f8; font-weight: 300; letter-spacing: 1px;}
+        .slide-cover .badge { background-color: var(--accent-orange); color: white; padding: 8px 20px; border-radius: 20px; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 20px;}
+        .slide-content { background-color: var(--white); flex-direction: column; padding: 110px 8% 40px 8%; justify-content: flex-start; }
+        .section-title { font-size: 1.8rem; color: var(--roche-dark); margin-bottom: 15px; display: flex; align-items: center; }
+        .section-title .step-num { background-color: var(--roche-blue); color: white; border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 1.1rem; font-weight: bold;}
+
+        /* --- TABLAS Y RIESGOS --- */
+        .table-container { height: 58vh; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .equip-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .equip-table th { background-color: var(--roche-dark); color: white; padding: 12px 15px; text-align: left; position: sticky; top: 0; z-index: 2;}
+        .equip-table td { padding: 10px 15px; border-bottom: 1px solid #eee; }
+        .equip-table tr:nth-child(even) { background-color: #fafafa; }
+        .equip-table .category { font-weight: 700; background-color: var(--light-blue); color: var(--roche-dark); }
+        .risk-high { border-left: 5px solid var(--alert-red) !important; }
+        .risk-med { border-left: 5px solid var(--warning-yellow) !important; }
+        .badge-risk { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; color: white;}
+        .bg-red { background-color: var(--alert-red); } .bg-yellow { background-color: var(--warning-yellow); color: #333;}
+        .options-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px;}
+        .opt-card { background: var(--bg-light); padding: 15px; border-radius: 8px; font-size: 0.85rem; border: 1px solid #ddd;}
+        .opt-card h4 { margin: 0 0 10px 0; color: var(--roche-blue); border-bottom: 1px solid #ccc; padding-bottom: 5px;}
+
+        /* --- GANTT DE ALTO NIVEL (PORCENTUAL EXACTO) --- */
+        .gantt-container { display: flex; flex-direction: column; border: 1px solid #ddd; border-radius: 8px; background: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-top: 15px; overflow: hidden; height: 60vh;}
+        .g-header { display: flex; background: var(--bg-light); border-bottom: 2px solid var(--roche-blue); }
+        .g-header-label { width: 220px; flex-shrink: 0; padding: 10px; font-weight: 700; color: var(--roche-dark); border-right: 1px solid #ddd;}
+        .g-header-months { flex-grow: 1; display: flex; }
+        .g-month { text-align: center; font-weight: 800; color: var(--roche-dark); font-size: 0.85rem; padding: 10px 0; border-right: 1px solid #ddd;}
+        .g-month:last-child { border-right: none; }
+        .g-row { display: flex; flex: 1; border-bottom: 1px solid #f0f0f0;}
+        .g-row:last-child { border-bottom: none; }
+        .g-label { width: 220px; flex-shrink: 0; padding: 0 15px; font-size: 0.8rem; font-weight: 700; color: var(--text-dark); border-right: 1px solid #ddd; display: flex; align-items: center; background: #fff; z-index: 2;}
+        .g-track { flex-grow: 1; position: relative; background: repeating-linear-gradient(to right, transparent, transparent calc(25% - 1px), #f9f9f9 calc(25% - 1px), #f9f9f9 25%); display: flex; align-items: center;}
+        .g-bar { position: absolute; height: 24px; top: 50%; transform: translateY(-50%); border-radius: 4px; background: var(--roche-blue); color: white; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; padding: 0 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); white-space: nowrap; overflow: hidden;}
+        .g-bar.orange { background: var(--accent-orange); }
+        .g-bar.green { background: var(--success-green); }
+
+        /* --- DASHBOARD RECURSOS --- */
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;}
+        .res-box { background: var(--white); border-radius: 8px; padding: 25px 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative; overflow: hidden;}
+        .res-box::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; }
+        .res-box.eng::before { background: var(--roche-blue); }
+        .res-box.ver::before { background: var(--success-green); }
+        .res-title { font-size: 1.2rem; color: var(--roche-dark); margin: 0 0 15px 0; display: flex; align-items: center; justify-content: space-between;}
+        
+        /* CORRECCIÓN ESTRUCTURAL DE LAS BARRAS PARA PROPORCIÓN PERFECTA */
+        .res-bar-container { display: flex; height: 180px; gap: 4px; padding-top: 10px; border-bottom: 2px solid #ddd; margin-bottom: 15px; width: 100%;}
+        .res-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%;}
+        .res-bar-wrapper { width: 100%; flex-grow: 1; display: flex; align-items: flex-end; }
+        .res-bar { width: 100%; border-radius: 3px 3px 0 0; position: relative; display: flex; justify-content: center; align-items: flex-start; padding-top: 4px; color: white; font-weight: bold; font-size: 0.65rem; transition: height 0.5s;}
+        
+        .res-box.eng .res-bar { background: var(--roche-blue); }
+        .res-box.ver .res-bar { background: var(--success-green); }
+        .res-week { font-size: 0.65rem; font-weight: 700; color: var(--text-gray); margin-top: 6px; margin-bottom: 2px;}
+        
+        .res-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 15px;}
+        .res-metric { background: var(--bg-light); padding: 10px; border-radius: 6px; text-align: center;}
+        .res-metric-val { font-size: 1.5rem; font-weight: 900; color: var(--roche-dark);}
+        .res-metric-lbl { font-size: 0.75rem; color: var(--text-gray); font-weight: 600;}
+
+        /* --- VISUALIZADOR INTERACTIVO --- */
+        .layout-viewer { display: flex; height: 65vh; background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);}
+        .layout-sidebar { width: 180px; background: var(--bg-light); border-right: 1px solid #ddd; padding: 10px; overflow-y: auto; flex-shrink: 0;}
+        .step-btn { display: block; width: 100%; text-align: left; padding: 8px 12px; margin-bottom: 4px; border: none; background: none; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 0.8rem; color: var(--text-gray); transition: 0.2s;}
+        .step-btn:hover { background: #e0e0e0; }
+        .step-btn.active { background: var(--roche-blue); color: white; }
+        .step-parallel { border-left: 4px solid var(--accent-orange); background: #fff5f0; color: var(--roche-dark);}
+        .layout-image-container { flex-grow: 1; display: flex; justify-content: center; align-items: center; padding: 15px; background: #fafafa;}
+        .layout-image-container img { max-width: 100%; max-height: 100%; object-fit: contain;}
+        .layout-info-panel { width: 340px; background: var(--white); border-left: 1px solid #ddd; padding: 20px; flex-shrink: 0; display: flex; flex-direction: column; overflow-y: auto;}
+        .info-title { color: var(--roche-dark); font-size: 1.1rem; margin-top: 0; border-bottom: 2px solid var(--accent-orange); padding-bottom: 8px; margin-bottom: 10px;}
+        .info-dates { font-size: 0.8rem; font-weight: 700; color: var(--white); background-color: var(--roche-blue); padding: 4px 10px; border-radius: 12px; display: inline-block; margin-bottom: 12px;}
+        .info-content { font-size: 0.85rem; line-height: 1.5; color: var(--text-gray); flex-grow: 1;}
+        .info-content ul { padding-left: 15px; margin-top: 5px;}
+        .info-content li { margin-bottom: 8px;}
+        
+        .slide-final { background: white; justify-content: center; align-items: center; padding-top: 80px;}
+        .slide-final img { max-width: 80%; max-height: 75vh; object-fit: contain; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="img/logo roche.jpg" alt="Roche Logo" class="logo-img" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Hoffmann-La_Roche_logo.svg/2560px-Hoffmann-La_Roche_logo.svg.png';">
+    </div>
+
+    <div class="bottom-nav">
+        <button id="btn-agenda" class="home-btn" title="Volver a la portada">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Inicio
+        </button>
+    </div>
+
+    <button id="btn-prev" class="nav-btn nav-prev hidden">❮</button>
+    <button id="btn-next" class="nav-btn nav-next">❯</button>
+    <div class="slide-number" id="slideCounter">1 / 7</div>
+
+
+    <!-- ================= DIAPOSITIVAS ================= -->
+    
+    <!-- 0. PORTADA -->
+    <div class="slide slide-cover active">
+        <span class="badge">Plan de Ejecución</span>
+        <h1>Proyecto Central de Referencia Keralty</h1>
+        <p>Hoja de ruta, recursos y plan de montaje (Q2 - Q3 2027)</p>
+    </div>
+
+    <!-- 1. PROYECCIÓN DE EQUIPOS -->
+    <div class="slide slide-content">
+        <h2 class="section-title"><span class="step-num">1</span> Proyección del Parque Tecnológico - Laboratorio Central</h2>
+        <div class="table-container">
+            <table class="equip-table">
+                <thead><tr><th>Área / Plataforma</th><th style="text-align:center">Inicio (Año 1)</th><th style="text-align:center">Final (Año 4)</th><th style="text-align:center">Crecimiento</th></tr></thead>
+                <tbody>
+                    <tr class="category"><td colspan="4">Química Clínica</td></tr>
+                    <tr><td>cobas 703</td><td style="text-align:center">4</td><td style="text-align:center">7</td><td style="text-align:center; color:var(--success-green); font-weight:bold;">+3</td></tr>
+                    <tr><td>cobas 503</td><td style="text-align:center">1</td><td style="text-align:center">4</td><td style="text-align:center; color:var(--success-green); font-weight:bold;">+3</td></tr>
+                    
+                    <tr class="category"><td colspan="4">Inmunoquímica (IA)</td></tr>
+                    <tr><td>cobas 801</td><td style="text-align:center">7</td><td style="text-align:center">12</td><td style="text-align:center; color:var(--success-green); font-weight:bold;">+5</td></tr>
+                    
+                    <tr class="category"><td colspan="4">Hematología</td></tr>
+                    <tr><td>XN-10</td><td style="text-align:center">6</td><td style="text-align:center">12</td><td style="text-align:center; color:var(--success-green); font-weight:bold;">+6</td></tr>
+                    <tr><td>SP-50</td><td style="text-align:center">2</td><td style="text-align:center">6</td><td style="text-align:center; color:var(--success-green); font-weight:bold;">+4</td></tr>
+                    <tr><td>DI-60</td><td style="text-align:center">2</td><td style="text-align:center">6</td><td style="text-align:center; color:var(--success-green); font-weight:bold;">+4</td></tr>
+                    
+                    <!-- Pre y Postanalítica separadas -->
+                    <tr class="category"><td colspan="4">Preanalítica</td></tr>
+                    <tr><td>cobas p612</td><td style="text-align:center">3</td><td style="text-align:center">4</td><td style="text-align:center; color:var(--success-green); font-weight:bold;">+1</td></tr>
+                    <tr><td>cobas p471</td><td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center; color:var(--success-green); font-weight:bold;">+1</td></tr>
+                    <tr><td>BLIM</td><td style="text-align:center">3</td><td style="text-align:center">4</td><td style="text-align:center; color:var(--success-green); font-weight:bold;">+1</td></tr>
+                    
+                    <tr class="category"><td colspan="4">Postanalítica</td></tr>
+                    <tr><td>cobas p701</td><td style="text-align:center">3</td><td style="text-align:center">4</td><td style="text-align:center; color:var(--success-green); font-weight:bold;">+1</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 2. GANTT DE ALTO NIVEL -->
+    <div class="slide slide-content">
+        <h2 class="section-title"><span class="step-num">2</span> Roadmap Ejecutivo de Implementación (Q2 - Q3 2027)</h2>
+        <p style="color: var(--text-gray); font-size: 0.95rem;">Visualización estructurada del cronograma. Muestra el progreso de infraestructura y los solapamientos de operaciones paralelas.</p>
+        
+        <div class="gantt-container">
+            <div class="g-header">
+                <div class="g-header-label"></div>
+                <div class="g-header-months">
+                    <div class="g-month" style="width: 25%;">Mayo</div>
+                    <div class="g-month" style="width: 25%;">Junio</div>
+                    <div class="g-month" style="width: 25%;">Julio</div>
+                    <div class="g-month" style="width: 25%;">Agosto</div>
+                </div>
+            </div>
+
+            <!-- Posiciones calculadas para 123 días (1 Mayo - 31 Agosto) -->
+            <div class="g-row">
+                <div class="g-label">1. Post-analítica y CCM 1</div>
+                <div class="g-track"><div class="g-bar" style="left: 1.6%; width: 15.4%;">3 May - 21 May</div></div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">2. Pre-analítica</div>
+                <div class="g-track"><div class="g-bar" style="left: 18.7%; width: 9.8%;">24 May - 4 Jun</div></div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">3. Puntos Cero Química</div>
+                <div class="g-track"><div class="g-bar" style="left: 30.1%; width: 15.4%;">7 Jun - 25 Jun</div></div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">4. Química Clínica Pro</div>
+                <div class="g-track"><div class="g-bar" style="left: 18.7%; width: 21.1%;">24 May - 18 Jun</div></div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">5. Mol. & CCM 2</div>
+                <div class="g-track"><div class="g-bar" style="left: 30.1%; width: 9.8%;">7 Jun - 18 Jun</div></div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">6. Inmunología</div>
+                <div class="g-track"><div class="g-bar" style="left: 35.8%; width: 26.8%;">14 Jun - 16 Jul</div></div>
+            </div>
+            <div class="g-row">
+                <div class="g-label" style="color: var(--accent-orange);">► Migración Tubos IT</div>
+                <div class="g-track"><div class="g-bar orange" style="left: 64.2%; width: 6.5%;">19 Jul - 26 Jul</div></div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">7. Hematología Nueva</div>
+                <div class="g-track"><div class="g-bar" style="left: 47.2%; width: 21.1%;">28 Jun - 23 Jul</div></div>
+            </div>
+            <div class="g-row">
+                <div class="g-label" style="color: var(--success-green);">► Traslado Hemato</div>
+                <div class="g-track"><div class="g-bar green" style="left: 69.9%; width: 4.1%;">26 - 30 Jul</div></div>
+            </div>
+            <div class="g-row">
+                <div class="g-label">8. Cierre Operativo</div>
+                <div class="g-track"><div class="g-bar" style="left: 69.9%; width: 4.1%;">26 - 30 Jul</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. DASHBOARD DE RECURSOS (BARRAS AJUSTADAS) -->
+    <div class="slide slide-content">
+        <h2 class="section-title"><span class="step-num">3</span> Asignación de Recursos Dedicados</h2>
+        <p style="color: var(--text-gray); font-size: 0.95rem; margin-top: -5px; margin-bottom: 10px;">Proyección semanal del esfuerzo de nuestros especialistas para garantizar la continuidad y calidad de la implementación (W18 - W30).</p>
+
+        <div class="res-grid">
+            <!-- RECURSOS DE INGENIERÍA -->
+            <div class="res-box eng">
+                <h3 class="res-title">⚙️ Equipo de Ingeniería <span style="font-size:0.75rem; font-weight:normal; color:#888;">(Instalación Física)</span></h3>
+                
+                <div class="res-bar-container">
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 66.6%;">6</div></div><div class="res-week">W18</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 88.8%;">8</div></div><div class="res-week">W19</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 88.8%;">8</div></div><div class="res-week">W20</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 100%; background: #005a91;">9</div></div><div class="res-week" style="color:var(--roche-dark);">W21</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 55.5%;">5</div></div><div class="res-week">W22</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 44.4%;">4</div></div><div class="res-week">W23</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 88.8%;">8</div></div><div class="res-week">W24</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 77.7%;">7</div></div><div class="res-week">W25</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 44.4%;">4</div></div><div class="res-week">W26</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 22.2%;">2</div></div><div class="res-week">W27</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W28</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W29</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 22.2%;">2</div></div><div class="res-week">W30</div></div>
+                </div>
+
+                <div class="res-metrics">
+                    <div class="res-metric">
+                        <div class="res-metric-val">63</div>
+                        <div class="res-metric-lbl">Semanas Totales Dedicadas</div>
+                    </div>
+                    <div class="res-metric">
+                        <div class="res-metric-val" style="color: var(--roche-blue);">Sem 21</div>
+                        <div class="res-metric-lbl">Semana de Máxima Demanda</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RECURSOS DE VERIFICACIÓN -->
+            <div class="res-box ver">
+                <h3 class="res-title">🔬 Verificación de Métodos</h3>
+                
+                <div class="res-bar-container">
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W18</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W19</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W20</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W21</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W22</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 80%;">4</div></div><div class="res-week">W23</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 80%;">4</div></div><div class="res-week">W24</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W25</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 60%;">3</div></div><div class="res-week">W26</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 60%;">3</div></div><div class="res-week">W27</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 100%; background: #008785;">5</div></div><div class="res-week" style="color:var(--success-green);">W28</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 40%;">2</div></div><div class="res-week">W29</div></div>
+                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W30</div></div>
+                </div>
+
+                <div class="res-metrics">
+                    <div class="res-metric">
+                        <div class="res-metric-val">21</div>
+                        <div class="res-metric-lbl">Semanas Totales Dedicadas</div>
+                    </div>
+                    <div class="res-metric">
+                        <div class="res-metric-val" style="color: var(--success-green);">Sem 28</div>
+                        <div class="res-metric-lbl">Semana de Máxima Demanda</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. VISUALIZADOR INTERACTIVO -->
+    <div class="slide slide-content">
+        <h2 class="section-title"><span class="step-num">4</span> Plan de Montaje Detallado (Layout a Layout)</h2>
+        
+        <div class="layout-viewer">
+            <div class="layout-sidebar" id="step-buttons"></div>
+            
+            <div class="layout-image-container">
+                <img id="layout-img" src="img/paso 1_3.png" alt="Plano">
+            </div>
+
+            <div class="layout-info-panel">
+                <h3 class="info-title" id="info-title">Título</h3>
+                <div class="info-dates" id="info-dates">Fechas</div>
+                <div class="info-content" id="info-content">Contenido</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. MATRIZ DE RIESGOS -->
+    <div class="slide slide-content">
+        <h2 class="section-title"><span class="step-num">5</span> Matriz de Riesgos y Estrategia de Unificación</h2>
+        
+        <div class="table-container" style="height: auto; max-height: 35vh; margin-bottom: 20px;">
+            <table class="equip-table">
+                <thead><tr><th>Riesgo Operativo / Técnico</th><th>Fase</th><th>Nivel</th><th>Plan de Mitigación / Acción</th></tr></thead>
+                <tbody>
+                    <tr class="risk-high">
+                        <td><strong>Caída de capacidad de procesamiento (400 CH/h)</strong></td><td>Traslado Hemato (Paralelo)</td>
+                        <td><span class="badge-risk bg-red">Alto</span></td>
+                        <td>Simulacros previos de tiempos de respuesta bajo estrés. Contingencia en red.</td>
+                    </tr>
+                    <tr class="risk-high">
+                        <td><strong>Impacto pre-analítico en Floresta</strong></td><td>Migración Tubos (Hito IT)</td>
+                        <td><span class="badge-risk bg-red">Alto</span></td>
+                        <td>Operar Floresta con carga frontal manual. Simulación previa obligatoria de contingencia.</td>
+                    </tr>
+                    <tr class="risk-med">
+                        <td><strong>Licenciamiento concurrente Navify Lab Ops</strong></td><td>Transversal</td>
+                        <td><span class="badge-risk bg-yellow">Medio</span></td>
+                        <td>Asegurar y habilitar operación simultánea en dos sedes para diferentes secciones.</td>
+                    </tr>
+                    <tr class="risk-med">
+                        <td><strong>Falta de accesorios para ensamble (e801 / CCM)</strong></td><td>Cierre (Paso 8)</td>
+                        <td><span class="badge-risk bg-yellow">Medio</span></td>
+                        <td>Aseguramiento de inventario de accesorios previo al desmontaje en Floresta.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="font-size: 1.1rem; color: var(--roche-dark); margin-bottom: 5px;">Opciones: Unificación Tubo Tapa Amarilla (Hito IT)</h3>
+        <div class="options-grid">
+            <div class="opt-card"><h4>A. Focalizada (Inmuno 1ro)</h4>Migra Inmuno, traslada un pre-analítico y prepara terreno para Química.<br><b>Riesgo:</b> Contingencia manual en Floresta.</div>
+            <div class="opt-card"><h4>B. Unificación Total (Big Bang)</h4>Se unifican todos los grupos en Inmuno.<br><b>Ventaja:</b> No hay redundancia de usuarios.<br><b>Riesgo:</b> Alta pérdida de muestras si no se simula el flujo.</div>
+            <div class="opt-card"><h4>C. Conservadora (Concordancia)</h4>Migración progresiva (menor a mayor carga).<br><b>Ventaja:</b> Altamente controlada.<br><b>Riesgo:</b> Operación y logística de envío duplicadas.</div>
+        </div>
+    </div>
+
+    <!-- 6. DIAPOSITIVA FINAL -->
+    <div class="slide slide-final">
+        <img src="img/doing now.png" alt="Doing now what patients need next">
+    </div>
+
+
+    <!-- ================= SCRIPT DE CONTROL ================= -->
+    <script>
+        const cronogramaData = {
+            1: {
+                title: "1. Post-analítica y CCM",
+                dates: "📅 03 May - 21 May",
+                content: "<ul><li><strong>cobas p701:</strong> Instalación de 3 unidades.</li><li><strong>CCM:</strong> Instalación del primer segmento de automatización.</li></ul>"
+            },
+            2: {
+                title: "2. Pre-analítica",
+                dates: "📅 24 May - 04 Jun",
+                content: "<ul><li><strong>Nuevos Equipos:</strong> Instalación de la línea pre-analítica nueva (BLIM, p471 y p612).</li></ul>"
+            },
+            3: {
+                title: "3. Puntos Cero Química",
+                dates: "📅 07 Jun - 25 Jun",
+                content: "<ul><li><strong>Ingeniería:</strong> Cierre de segmentos CCM para las 3 líneas de química.</li><li><strong>Aplicaciones:</strong> Configuración paralela de la pre-analítica.</li></ul>"
+            },
+            4: {
+                title: "4. Química Clínica",
+                dates: "📅 24 May - 18 Jun",
+                content: "<ul><li><strong>Instalación:</strong> Montaje físico cobas pro química x3 (24 May - 04 Jun).</li><li><strong>Verificación:</strong> Verificación de métodos (07 Jun - 18 Jun).</li></ul>"
+            },
+            5: {
+                title: "5. Polígono 2 y Biología Mol.",
+                dates: "📅 07 Jun - 18 Jun",
+                content: "<ul><li><strong>Molecular:</strong> Instalación <i>cobas prime</i> (07 Jun - 18 Jun).</li><li><strong>CCM:</strong> Instalación de 2do polígono y ajustes.</li></ul>"
+            },
+            6: {
+                title: "6. Inmunología",
+                dates: "📅 14 Jun - 16 Jul",
+                content: "<ul><li><strong>Instalación:</strong> Montaje cobas pro e801 x 2 líneas (14 Jun - 25 Jun).</li><li><strong>Verificación:</strong> Validación de métodos (28 Jun - 16 Jul).</li></ul>"
+            },
+            7: {
+                title: "[HITO IT] Migración Tubos",
+                dates: "📅 19 Jul - 26 Jul",
+                content: "<ul><li><strong>Actividad Paralela:</strong> Inicia formalmente al terminar la validación del e801.</li><li>Ejecución de simulaciones y migración de tubo amarillo.</li></ul>"
+            },
+            8: {
+                title: "7. Hematología Nueva",
+                dates: "📅 28 Jun - 23 Jul",
+                content: "<ul><li><strong>Línea XN-9100:</strong> Instalación (28 Jun - 09 Jul).</li><li><strong>Verificación:</strong> Validación (12 Jul - 23 Jul) mientras Floresta procesa hemato.</li></ul>"
+            },
+            9: {
+                title: "[HITO] Traslado Hemato",
+                dates: "📅 26 Jul - 30 Jul",
+                content: "<ul><li><strong>Actividad Paralela:</strong> Traslado de línea adicional desde Floresta.</li><li><strong>⚠️ Riesgo:</strong> Operación temporal sostenida por capacidad limitada.</li></ul>"
+            },
+            10: {
+                title: "8. Cierre Operativo",
+                dates: "📅 26 Jul - 30 Jul",
+                content: "<ul><li><strong>Actividades Paralelas:</strong></li><li>1. Traslado e instalación del último pre-analítico.</li><li>2. Ensamble de los últimos módulos de expansión.</li></ul>"
+            },
+            11: {
+                title: "Plano Final Consolidado",
+                dates: "📅 Agosto 2027",
+                content: "<ul><li>Cierre del proyecto técnico.</li><li>Laboratorio operativo al 100%.</li><li>Todas las líneas integradas al sistema CCM listas para producción.</li></ul>"
+            }
+        };
+
+        const buttonLabels = [
+            "1. Post-analítica", "2. Pre-analítica", "3. Puntos Cero", 
+            "4. Química Pro", "5. Pol. 2 y Molecular", "6. Inmunología", 
+            "► Migración Tubos (IT)", "7. Hematología Nueva", "► Traslado Hemato", "8. Cierre Operativo", "Plano Final"
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const slides = document.querySelectorAll('.slide');
+            const counter = document.getElementById('slideCounter');
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+            const btnAgenda = document.getElementById('btn-agenda');
+            let currentSlide = 0;
+
+            function renderSlide() {
+                slides.forEach((slide, index) => {
+                    if (index === currentSlide) slide.classList.add('active');
+                    else slide.classList.remove('active');
+                });
+                counter.innerText = (currentSlide + 1) + " / " + slides.length;
+                if (currentSlide === 0) btnPrev.classList.add('hidden'); else btnPrev.classList.remove('hidden');
+                if (currentSlide === slides.length - 1) btnNext.classList.add('hidden'); else btnNext.classList.remove('hidden');
+            }
+
+            btnPrev.addEventListener('click', () => { if (currentSlide > 0) { currentSlide--; renderSlide(); } });
+            btnNext.addEventListener('click', () => { if (currentSlide < slides.length - 1) { currentSlide++; renderSlide(); } });
+            btnAgenda.addEventListener('click', () => { currentSlide = 0; renderSlide(); });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowRight' && currentSlide < slides.length - 1) { currentSlide++; renderSlide(); } 
+                else if (event.key === 'ArrowLeft' && currentSlide > 0) { currentSlide--; renderSlide(); }
+            });
+
+            // --- VISUALIZADOR ---
+            const btnContainer = document.getElementById('step-buttons');
+            const layoutImg = document.getElementById('layout-img');
+            const infoTitle = document.getElementById('info-title');
+            const infoDates = document.getElementById('info-dates');
+            const infoContent = document.getElementById('info-content');
+
+            function updateInfoPanel(step) {
+                const data = cronogramaData[step];
+                if(data) {
+                    infoTitle.innerText = data.title;
+                    infoDates.innerText = data.dates;
+                    infoContent.innerHTML = data.content;
+                }
+            }
+
+            for (let i = 1; i <= 11; i++) {
+                let btn = document.createElement('button');
+                btn.className = 'step-btn';
+                if (i === 1) btn.classList.add('active');
+                
+                // Estilo especial para el botón final y paralelos
+                if (i === 7 || i === 9) {
+                    btn.classList.add('step-parallel');
+                }
+                if (i === 11) {
+                    btn.style.marginTop = '10px';
+                    btn.style.borderTop = '1px solid #ccc';
+                    btn.style.paddingTop = '10px';
+                }
+                
+                btn.innerText = buttonLabels[i-1];
+                
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    
+                    let imagePath = '';
+                    if (i === 11) {
+                        imagePath = `img/plano final.png`;
+                    } else {
+                        // Mapeo lógico de imágenes
+                        let imageIndex = i;
+                        if (i === 7) imageIndex = 6; 
+                        if (i === 8) imageIndex = 7; 
+                        if (i === 9) imageIndex = 8; 
+                        if (i === 10) imageIndex = 10; 
+                        
+                        imagePath = `img/paso ${imageIndex}_3.png`;
+                    }
+                    
+                    layoutImg.src = imagePath;
+                    
+                    // Fallbacks
+                    layoutImg.onerror = function() {
+                        if(i !== 11) {
+                            let fIndex = i;
+                            if (i===7) fIndex=6; if (i===8) fIndex=7; if(i===9) fIndex=8; if(i===10) fIndex=10;
+                            
+                            this.onerror = function() {
+                                this.src = `img/paso ${fIndex}.png`;
+                            };
+                            this.src = `img/paso ${fIndex}_2.png`;
+                        }
+                    };
+
+                    updateInfoPanel(i); 
+                });
+                
+                btnContainer.appendChild(btn);
+            }
+
+            renderSlide();
+            updateInfoPanel(1);
+        });
+    </script>
+</body>
+</html>
