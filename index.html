@@ -56,12 +56,12 @@
         .opt-card { background: var(--bg-light); padding: 15px; border-radius: 8px; font-size: 0.85rem; border: 1px solid #ddd;}
         .opt-card h4 { margin: 0 0 10px 0; color: var(--roche-blue); border-bottom: 1px solid #ccc; padding-bottom: 5px;}
 
-        /* --- GANTT DE ALTO NIVEL (PORCENTUAL EXACTO) --- */
+        /* --- GANTT DE ALTO NIVEL (PORCENTUAL EXACTO ABRIL-JULIO) --- */
         .gantt-container { display: flex; flex-direction: column; border: 1px solid #ddd; border-radius: 8px; background: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-top: 15px; overflow: hidden; height: 60vh;}
         .g-header { display: flex; background: var(--bg-light); border-bottom: 2px solid var(--roche-blue); }
         .g-header-label { width: 220px; flex-shrink: 0; padding: 10px; font-weight: 700; color: var(--roche-dark); border-right: 1px solid #ddd;}
         .g-header-months { flex-grow: 1; display: flex; }
-        .g-month { text-align: center; font-weight: 800; color: var(--roche-dark); font-size: 0.85rem; padding: 10px 0; border-right: 1px solid #ddd;}
+        .g-month { text-align: center; font-weight: 800; color: var(--roche-dark); font-size: 0.85rem; padding: 10px 0; border-right: 1px solid #ddd; width: 25%;}
         .g-month:last-child { border-right: none; }
         .g-row { display: flex; flex: 1; border-bottom: 1px solid #f0f0f0;}
         .g-row:last-child { border-bottom: none; }
@@ -72,27 +72,22 @@
         .g-bar.green { background: var(--success-green); }
 
         /* --- DASHBOARD RECURSOS --- */
-        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;}
-        .res-box { background: var(--white); border-radius: 8px; padding: 25px 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative; overflow: hidden;}
-        .res-box::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; }
-        .res-box.eng::before { background: var(--roche-blue); }
-        .res-box.ver::before { background: var(--success-green); }
-        .res-title { font-size: 1.2rem; color: var(--roche-dark); margin: 0 0 15px 0; display: flex; align-items: center; justify-content: space-between;}
+        .mkt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 30px; height: 50vh;}
+        .mkt-card { background: var(--white); border-radius: 12px; padding: 35px 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #eaeaea; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden;}
+        .mkt-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 6px; }
+        .mkt-card.blue::before { background: var(--roche-blue); }
+        .mkt-card.orange::before { background: var(--accent-orange); }
+        .mkt-card.green::before { background: var(--success-green); }
         
-        /* CORRECCIÓN ESTRUCTURAL DE LAS BARRAS PARA PROPORCIÓN PERFECTA */
-        .res-bar-container { display: flex; height: 180px; gap: 4px; padding-top: 10px; border-bottom: 2px solid #ddd; margin-bottom: 15px; width: 100%;}
-        .res-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%;}
-        .res-bar-wrapper { width: 100%; flex-grow: 1; display: flex; align-items: flex-end; }
-        .res-bar { width: 100%; border-radius: 3px 3px 0 0; position: relative; display: flex; justify-content: center; align-items: flex-start; padding-top: 4px; color: white; font-weight: bold; font-size: 0.65rem; transition: height 0.5s;}
+        .mkt-number { font-size: 5.5rem; font-weight: 900; line-height: 1; margin-bottom: 10px; }
+        .mkt-card.blue .mkt-number { color: var(--roche-blue); }
+        .mkt-card.orange .mkt-number { color: var(--accent-orange); }
+        .mkt-card.green .mkt-number { color: var(--success-green); }
         
-        .res-box.eng .res-bar { background: var(--roche-blue); }
-        .res-box.ver .res-bar { background: var(--success-green); }
-        .res-week { font-size: 0.65rem; font-weight: 700; color: var(--text-gray); margin-top: 6px; margin-bottom: 2px;}
+        .mkt-title { font-size: 1.3rem; font-weight: 800; color: var(--roche-dark); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .mkt-desc { font-size: 0.95rem; color: var(--text-gray); line-height: 1.6;}
         
-        .res-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 15px;}
-        .res-metric { background: var(--bg-light); padding: 10px; border-radius: 6px; text-align: center;}
-        .res-metric-val { font-size: 1.5rem; font-weight: 900; color: var(--roche-dark);}
-        .res-metric-lbl { font-size: 0.75rem; color: var(--text-gray); font-weight: 600;}
+        .mkt-highlight { display: inline-block; background: var(--light-blue); padding: 5px 15px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; color: var(--roche-dark); margin-top: 20px;}
 
         /* --- VISUALIZADOR INTERACTIVO --- */
         .layout-viewer { display: flex; height: 65vh; background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);}
@@ -114,6 +109,7 @@
         .slide-final img { max-width: 80%; max-height: 75vh; object-fit: contain; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
+    <meta name="robots" content="noindex, nofollow">
 </head>
 <body>
 
@@ -176,132 +172,93 @@
     <!-- 2. GANTT DE ALTO NIVEL -->
     <div class="slide slide-content">
         <h2 class="section-title"><span class="step-num">2</span> Roadmap Ejecutivo de Implementación (Q2 - Q3 2027)</h2>
-        <p style="color: var(--text-gray); font-size: 0.95rem;">Visualización estructurada del cronograma. Muestra el progreso de infraestructura y los solapamientos de operaciones paralelas.</p>
+        <p style="color: var(--text-gray); font-size: 0.95rem;">Visualización estructurada del cronograma acelerado. Base de cálculo: 122 días operativos (Abril a Julio).</p>
         
         <div class="gantt-container">
             <div class="g-header">
                 <div class="g-header-label"></div>
                 <div class="g-header-months">
-                    <div class="g-month" style="width: 25%;">Mayo</div>
-                    <div class="g-month" style="width: 25%;">Junio</div>
-                    <div class="g-month" style="width: 25%;">Julio</div>
-                    <div class="g-month" style="width: 25%;">Agosto</div>
+                    <div class="g-month">Abril</div>
+                    <div class="g-month">Mayo</div>
+                    <div class="g-month">Junio</div>
+                    <div class="g-month">Julio</div>
                 </div>
             </div>
 
-            <!-- Posiciones calculadas para 123 días (1 Mayo - 31 Agosto) -->
             <div class="g-row">
                 <div class="g-label">1. Post-analítica y CCM 1</div>
-                <div class="g-track"><div class="g-bar" style="left: 1.6%; width: 15.4%;">3 May - 21 May</div></div>
+                <div class="g-track"><div class="g-bar" style="left: 14.8%; width: 15.6%;">19 Abr - 07 May</div></div>
             </div>
             <div class="g-row">
                 <div class="g-label">2. Pre-analítica</div>
-                <div class="g-track"><div class="g-bar" style="left: 18.7%; width: 9.8%;">24 May - 4 Jun</div></div>
+                <div class="g-track"><div class="g-bar" style="left: 32.0%; width: 9.8%;">10 May - 21 May</div></div>
             </div>
             <div class="g-row">
                 <div class="g-label">3. Puntos Cero Química</div>
-                <div class="g-track"><div class="g-bar" style="left: 30.1%; width: 15.4%;">7 Jun - 25 Jun</div></div>
+                <div class="g-track"><div class="g-bar" style="left: 43.4%; width: 15.6%;">24 May - 11 Jun</div></div>
             </div>
             <div class="g-row">
                 <div class="g-label">4. Química Clínica Pro</div>
-                <div class="g-track"><div class="g-bar" style="left: 18.7%; width: 21.1%;">24 May - 18 Jun</div></div>
+                <div class="g-track"><div class="g-bar" style="left: 32.0%; width: 21.3%;">10 May - 04 Jun</div></div>
             </div>
             <div class="g-row">
                 <div class="g-label">5. Mol. & CCM 2</div>
-                <div class="g-track"><div class="g-bar" style="left: 30.1%; width: 9.8%;">7 Jun - 18 Jun</div></div>
+                <div class="g-track"><div class="g-bar" style="left: 37.7%; width: 9.8%;">17 May - 28 May</div></div>
             </div>
             <div class="g-row">
                 <div class="g-label">6. Inmunología</div>
-                <div class="g-track"><div class="g-bar" style="left: 35.8%; width: 26.8%;">14 Jun - 16 Jul</div></div>
+                <div class="g-track"><div class="g-bar" style="left: 49.2%; width: 27.0%;">31 May - 02 Jul</div></div>
             </div>
             <div class="g-row">
                 <div class="g-label" style="color: var(--accent-orange);">► Migración Tubos IT</div>
-                <div class="g-track"><div class="g-bar orange" style="left: 64.2%; width: 6.5%;">19 Jul - 26 Jul</div></div>
+                <div class="g-track"><div class="g-bar orange" style="left: 77.9%; width: 6.6%;">05 Jul - 12 Jul</div></div>
             </div>
             <div class="g-row">
                 <div class="g-label">7. Hematología Nueva</div>
-                <div class="g-track"><div class="g-bar" style="left: 47.2%; width: 21.1%;">28 Jun - 23 Jul</div></div>
+                <div class="g-track"><div class="g-bar" style="left: 60.7%; width: 21.3%;">14 Jun - 09 Jul</div></div>
             </div>
             <div class="g-row">
                 <div class="g-label" style="color: var(--success-green);">► Traslado Hemato</div>
-                <div class="g-track"><div class="g-bar green" style="left: 69.9%; width: 4.1%;">26 - 30 Jul</div></div>
+                <div class="g-track"><div class="g-bar green" style="left: 77.9%; width: 6.6%;">05 Jul - 12 Jul</div></div>
             </div>
             <div class="g-row">
                 <div class="g-label">8. Cierre Operativo</div>
-                <div class="g-track"><div class="g-bar" style="left: 69.9%; width: 4.1%;">26 - 30 Jul</div></div>
+                <div class="g-track"><div class="g-bar" style="left: 77.9%; width: 9.8%;">05 Jul - 16 Jul</div></div>
             </div>
         </div>
     </div>
 
-    <!-- 3. DASHBOARD DE RECURSOS (BARRAS AJUSTADAS) -->
+    <!-- 3. DASHBOARD DE RECURSOS -->
     <div class="slide slide-content">
-        <h2 class="section-title"><span class="step-num">3</span> Asignación de Recursos Dedicados</h2>
-        <p style="color: var(--text-gray); font-size: 0.95rem; margin-top: -5px; margin-bottom: 10px;">Proyección semanal del esfuerzo de nuestros especialistas para garantizar la continuidad y calidad de la implementación (W18 - W30).</p>
+        <h2 class="section-title"><span class="step-num">3</span> Asignación de Recursos Técnicos y Científicos</h2>
+        <p style="color: var(--text-gray); font-size: 0.95rem; margin-top: -5px; margin-bottom: 10px;">Distribución del equipo de especialistas asignado para la ejecución paralela del proyecto Keralty.</p>
 
-        <div class="res-grid">
-            <!-- RECURSOS DE INGENIERÍA -->
-            <div class="res-box eng">
-                <h3 class="res-title">⚙️ Equipo de Ingeniería <span style="font-size:0.75rem; font-weight:normal; color:#888;">(Instalación Física)</span></h3>
-                
-                <div class="res-bar-container">
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 66.6%;">6</div></div><div class="res-week">W18</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 88.8%;">8</div></div><div class="res-week">W19</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 88.8%;">8</div></div><div class="res-week">W20</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 100%; background: #005a91;">9</div></div><div class="res-week" style="color:var(--roche-dark);">W21</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 55.5%;">5</div></div><div class="res-week">W22</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 44.4%;">4</div></div><div class="res-week">W23</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 88.8%;">8</div></div><div class="res-week">W24</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 77.7%;">7</div></div><div class="res-week">W25</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 44.4%;">4</div></div><div class="res-week">W26</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 22.2%;">2</div></div><div class="res-week">W27</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W28</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W29</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 22.2%;">2</div></div><div class="res-week">W30</div></div>
-                </div>
-
-                <div class="res-metrics">
-                    <div class="res-metric">
-                        <div class="res-metric-val">63</div>
-                        <div class="res-metric-lbl">Semanas Totales Dedicadas</div>
-                    </div>
-                    <div class="res-metric">
-                        <div class="res-metric-val" style="color: var(--roche-blue);">Sem 21</div>
-                        <div class="res-metric-lbl">Semana de Máxima Demanda</div>
-                    </div>
-                </div>
+        <div class="mkt-grid">
+            
+            <!-- TARJETA 1 -->
+            <div class="mkt-card blue">
+                <div class="mkt-number">9</div>
+                <div class="mkt-title">Ingenieros de Campo</div>
+                <div class="mkt-desc">Encargados de la instalación física de los analizadores, el montaje de la línea de automatización (CCM) y la ejecución de los protocolos de instalación según manuales de fábrica.</div>
+                <div><span class="mkt-highlight">Instalación y Automatización</span></div>
             </div>
 
-            <!-- RECURSOS DE VERIFICACIÓN -->
-            <div class="res-box ver">
-                <h3 class="res-title">🔬 Verificación de Métodos</h3>
-                
-                <div class="res-bar-container">
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W18</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W19</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W20</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W21</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W22</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 80%;">4</div></div><div class="res-week">W23</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 80%;">4</div></div><div class="res-week">W24</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W25</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 60%;">3</div></div><div class="res-week">W26</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 60%;">3</div></div><div class="res-week">W27</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 100%; background: #008785;">5</div></div><div class="res-week" style="color:var(--success-green);">W28</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 40%;">2</div></div><div class="res-week">W29</div></div>
-                    <div class="res-bar-col"><div class="res-bar-wrapper"><div class="res-bar" style="height: 2%; color:transparent; background:transparent;">0</div></div><div class="res-week">W30</div></div>
-                </div>
-
-                <div class="res-metrics">
-                    <div class="res-metric">
-                        <div class="res-metric-val">21</div>
-                        <div class="res-metric-lbl">Semanas Totales Dedicadas</div>
-                    </div>
-                    <div class="res-metric">
-                        <div class="res-metric-val" style="color: var(--success-green);">Sem 28</div>
-                        <div class="res-metric-lbl">Semana de Máxima Demanda</div>
-                    </div>
-                </div>
+            <!-- TARJETA 2 -->
+            <div class="mkt-card orange">
+                <div class="mkt-number">3</div>
+                <div class="mkt-title">Asesores Científicos<br><span style="font-size: 0.85rem; color: var(--text-gray); text-transform: none; letter-spacing: 0;">(Configuración)</span></div>
+                <div class="mkt-desc">Responsables de la configuración inicial de los analizadores, parametrización de las pruebas y la puesta a punto de los equipos antes de iniciar las fases de validación.</div>
+                <div><span class="mkt-highlight">Configuración y Puesta a Punto</span></div>
             </div>
+
+            <!-- TARJETA 3 -->
+            <div class="mkt-card green">
+                <div class="mkt-number">5</div>
+                <div class="mkt-title">Asesores Científicos<br><span style="font-size: 0.85rem; color: var(--text-gray); text-transform: none; letter-spacing: 0;">(Verificación)</span></div>
+                <div class="mkt-desc">Dedicados a la ejecución de las pruebas de verificación de métodos, control de calidad y validación clínica para garantizar la fiabilidad de los resultados emitidos.</div>
+                <div><span class="mkt-highlight">Verificación de Métodos</span></div>
+            </div>
+
         </div>
     </div>
 
@@ -375,57 +332,57 @@
         const cronogramaData = {
             1: {
                 title: "1. Post-analítica y CCM",
-                dates: "📅 03 May - 21 May",
+                dates: "📅 19 Abr - 07 May",
                 content: "<ul><li><strong>cobas p701:</strong> Instalación de 3 unidades.</li><li><strong>CCM:</strong> Instalación del primer segmento de automatización.</li></ul>"
             },
             2: {
                 title: "2. Pre-analítica",
-                dates: "📅 24 May - 04 Jun",
+                dates: "📅 10 May - 21 May",
                 content: "<ul><li><strong>Nuevos Equipos:</strong> Instalación de la línea pre-analítica nueva (BLIM, p471 y p612).</li></ul>"
             },
             3: {
                 title: "3. Puntos Cero Química",
-                dates: "📅 07 Jun - 25 Jun",
+                dates: "📅 24 May - 11 Jun",
                 content: "<ul><li><strong>Ingeniería:</strong> Cierre de segmentos CCM para las 3 líneas de química.</li><li><strong>Aplicaciones:</strong> Configuración paralela de la pre-analítica.</li></ul>"
             },
             4: {
                 title: "4. Química Clínica",
-                dates: "📅 24 May - 18 Jun",
-                content: "<ul><li><strong>Instalación:</strong> Montaje físico cobas pro química x3 (24 May - 04 Jun).</li><li><strong>Verificación:</strong> Verificación de métodos (07 Jun - 18 Jun).</li></ul>"
+                dates: "📅 10 May - 04 Jun",
+                content: "<ul><li><strong>Instalación:</strong> Montaje físico cobas pro química x3.</li><li><strong>Verificación:</strong> Verificación de métodos y control de calidad.</li></ul>"
             },
             5: {
                 title: "5. Polígono 2 y Biología Mol.",
-                dates: "📅 07 Jun - 18 Jun",
-                content: "<ul><li><strong>Molecular:</strong> Instalación <i>cobas prime</i> (07 Jun - 18 Jun).</li><li><strong>CCM:</strong> Instalación de 2do polígono y ajustes.</li></ul>"
+                dates: "📅 17 May - 28 May",
+                content: "<ul><li><strong>Molecular:</strong> Instalación <i>cobas prime</i>.</li><li><strong>CCM:</strong> Instalación de 2do polígono y ajustes.</li></ul>"
             },
             6: {
                 title: "6. Inmunología",
-                dates: "📅 14 Jun - 16 Jul",
-                content: "<ul><li><strong>Instalación:</strong> Montaje cobas pro e801 x 2 líneas (14 Jun - 25 Jun).</li><li><strong>Verificación:</strong> Validación de métodos (28 Jun - 16 Jul).</li></ul>"
+                dates: "📅 31 May - 02 Jul",
+                content: "<ul><li><strong>Instalación:</strong> Montaje cobas pro e801 x 2 líneas.</li><li><strong>Verificación:</strong> Validación de métodos en paralelo.</li></ul>"
             },
             7: {
                 title: "[HITO IT] Migración Tubos",
-                dates: "📅 19 Jul - 26 Jul",
+                dates: "📅 05 Jul - 12 Jul",
                 content: "<ul><li><strong>Actividad Paralela:</strong> Inicia formalmente al terminar la validación del e801.</li><li>Ejecución de simulaciones y migración de tubo amarillo.</li></ul>"
             },
             8: {
                 title: "7. Hematología Nueva",
-                dates: "📅 28 Jun - 23 Jul",
-                content: "<ul><li><strong>Línea XN-9100:</strong> Instalación (28 Jun - 09 Jul).</li><li><strong>Verificación:</strong> Validación (12 Jul - 23 Jul) mientras Floresta procesa hemato.</li></ul>"
+                dates: "📅 14 Jun - 09 Jul",
+                content: "<ul><li><strong>Línea XN-9100:</strong> Instalación de infraestructura base.</li><li><strong>Verificación:</strong> Validación de reactivos e interconexión.</li></ul>"
             },
             9: {
                 title: "[HITO] Traslado Hemato",
-                dates: "📅 26 Jul - 30 Jul",
+                dates: "📅 05 Jul - 12 Jul",
                 content: "<ul><li><strong>Actividad Paralela:</strong> Traslado de línea adicional desde Floresta.</li><li><strong>⚠️ Riesgo:</strong> Operación temporal sostenida por capacidad limitada.</li></ul>"
             },
             10: {
                 title: "8. Cierre Operativo",
-                dates: "📅 26 Jul - 30 Jul",
+                dates: "📅 05 Jul - 16 Jul",
                 content: "<ul><li><strong>Actividades Paralelas:</strong></li><li>1. Traslado e instalación del último pre-analítico.</li><li>2. Ensamble de los últimos módulos de expansión.</li></ul>"
             },
             11: {
                 title: "Plano Final Consolidado",
-                dates: "📅 Agosto 2027",
+                dates: "📅 Fines Julio 2027",
                 content: "<ul><li>Cierre del proyecto técnico.</li><li>Laboratorio operativo al 100%.</li><li>Todas las líneas integradas al sistema CCM listas para producción.</li></ul>"
             }
         };
